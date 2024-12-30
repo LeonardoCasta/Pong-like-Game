@@ -1,4 +1,6 @@
+#include <cstdio>
 #include <SFML/Graphics.hpp>
+#include "../header/Animation.h"
  
 int main()
 {
@@ -7,39 +9,47 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Pong", sf::Style::Close, settings);
     window.setFramerateLimit(60); // call it once after creating the window
-    // window.setFillColor(sf::Color::Blue);
 
     //Player
-    sf::RectangleShape player(sf::Vector2f(150.0f, 20.0f));
-    player.setFillColor(sf::Color::White);
-    player.setOrigin(75.0f, 10.0f);
-    player.setPosition(640.0f, 680.0f);
+    //sf::Sprite player;
+    sf::RectangleShape player(sf::Vector2f(100.0f, 25.0f));
+    player.setPosition(840.0f, 300.0f);
+    player.setFillColor(sf::Color::Blue);
  
     //ball
     sf::CircleShape ball(20.0f);
     ball.setPosition(300.0f, 300.0f);
-
+    ball.setFillColor(sf::Color::Blue);
 
     //bomb
-    sf::RectangleShape bomb(sf::Vector2f(100.0f, 100.0f));
+    //sf::RectangleShape bomb(sf::Vector2f(100.0f, 100.0f));
+    sf::Sprite bomb;
+    bomb.setScale(0.1,0.1);
     bomb.setPosition(600.0f, 300.0f);
 
     //texture
-    sf::Texture bombTexture;
-    if(!bombTexture.loadFromFile("bombNoB.png")){
+    sf::Texture explosionTexture;
+    if(!explosionTexture.loadFromFile("./images/ExplosionAnimation.png")){
         printf("Error load ball texture");
     }
-    bomb.setTexture(&bombTexture);
-    //test in case we need to cut a texture
-    //sf::Vector2u textureSize = bombTexture.getSize();
-    // textureSize.x /= 2;
-    // textureSize.y /= 4;
-    //player.setTextureRect(sf::IntRect(0,0, textureSize.x, textureSize.y));
+    
+    sf::Texture bombTexture;
+    if(!bombTexture.loadFromFile("./images/bombNoB.png")){
+        printf("Error load ball texture");
+    }
+    bomb.setTexture(explosionTexture);
 
-    //bomb.setTextureRect(sf::IntRect({10, 10}, {100, 100}));
+    //create the animation object
+    Animation animation(&explosionTexture, sf::Vector2u(4, 4), 0.1f);
+    //delta time 
+    float deltaTime = 0.0f;
+
+    sf::Clock clock;
 
     while (window.isOpen())
     {
+        deltaTime = clock.restart().asSeconds();
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -58,10 +68,18 @@ int main()
             player.move(15.0f, 0.0f);
         }
 
-        //bomb movement, if bomb hits player explodes animation and game over
-        bomb.move(0.0f, 2.0f);
+        if(player.getGlobalBounds().intersects(bomb.getGlobalBounds()))
+        {
+            
+        }
 
-        window.clear();
+        //bomb movement, if bomb hits player explodes animation and game over
+        //bomb.move(0.0f, 2.0f);
+
+        animation.update(2, deltaTime);
+        bomb.setTextureRect(animation.uvRect);
+
+        window.clear(sf::Color::White);
         window.draw(player);
         window.draw(ball);
         window.draw(bomb);

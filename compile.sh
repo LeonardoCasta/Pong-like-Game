@@ -1,7 +1,9 @@
 #!/bin/bash
 
-g++ -c ./source/main.cpp ./source/main.cpp
+g++ -c ./source/main.cpp -o main.o
 
-g++ ./main.o -o game -lsfml-graphics -lsfml-window -lsfml-system
+g++ -c ./source/Animation.cpp -o animation.o
+
+g++ main.o animation.o -o game -lsfml-graphics -lsfml-window -lsfml-system
 
 #./sfml-app
