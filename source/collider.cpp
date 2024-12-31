@@ -1,30 +1,44 @@
-#include <Collider.h>
+#include <Collider.hpp>
 
-Collider::Collider(sf::RectangleShape& body) : body(body)
-{
 
-}
-
-Collider::~Collider()
+Collider::Collider()
 {
 }
 
-bool Collider::checkCollision(Collide& other, float push)
+bool Collider::rectanglesCollision(sf::RectangleShape* first, sf::RectangleShape* second)
 {
-    sf::Vector2f otherPosition = other.getPosition();
-    sf::Vector2f otherHalfPosition = other.GetHalfSize();
-    sf::Vector2f thisPosition = getPosition();
-    sf::Vector2f thisHalfPosition = GetHalfSize();
+    sf::Vector2f secondPosition = second->getPosition();
+    sf::Vector2f secondHalfPosition = second->GetHalfSize();
+    sf::Vector2f firstPosition = first->getPosition();
+    sf::Vector2f firstHalfPosition = first->GetHalfSize();
 
-    float deltaX = otherHalfPosition.x - thisPosition.x;
-    float deltaY = otherHalfPosition.y - thisPosition.Y;
+    float deltaX = secondHalfPosition.x - firstPosition.x;
+    float deltaY = secondHalfPosition.y - firstPosition.Y;
 
-    float intersectX = abs(deltaX) - (otherHalfPosition.x + thisHalfPosition.x);    
-    float intersectY = abs(deltaY) - (otherHalfPosition.y + thisHalfPosition.y);    
+    float intersectX = abs(deltaX) - (secondHalfPosition.x + firstHalfPosition.x);    
+    float intersectY = abs(deltaY) - (secondHalfPosition.y + firstHalfPosition.y);    
 
     if(intersectX < 0,0f && intersectY < 0.0f){
         return true;
     }
 
     return false
+}
+
+bool Collider::circlesCollision(sf::CircleShape* first, sf::CircleShape* second)
+{
+    sf::FloatRect shape1 = first->getGlobalBounds();
+    sf::FloatRect shape2 = second->getGlobalBounds();
+
+    float dx = (first->getPosition().x + (shape1.width / 2) - second->getPosition().x + (shape2.width /2)); 
+    float dy = (first->getPosition().y + (shape1.height / 2) - second->getPosition().y + (shape2.height /2)); 
+
+    float distance = std::sqrt((dx * dx) + (dy * dy));
+
+    if (distance <= ((shape1.width / 2) * (shape2.width / 2)))
+    {
+        return true;
+    }
+
+    return false;
 }

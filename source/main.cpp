@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <SFML/Graphics.hpp>
-#include "../header/Animation.h"
+#include "../header/Bomb.hpp"
+#include "../header/Player.hpp"
  
 int main()
 {
@@ -8,39 +9,25 @@ int main()
     settings.antialiasingLevel = 8;
 
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Pong", sf::Style::Close, settings);
-    window.setFramerateLimit(60); // call it once after creating the window
+    //window.setFramerateLimit(60); // call it once after creating the window
 
-    //Player
-    //sf::Sprite player;
-    sf::RectangleShape player(sf::Vector2f(100.0f, 25.0f));
-    player.setPosition(840.0f, 300.0f);
-    player.setFillColor(sf::Color::Blue);
- 
     //ball
     sf::CircleShape ball(20.0f);
     ball.setPosition(300.0f, 300.0f);
     ball.setFillColor(sf::Color::Blue);
 
-    //bomb
-    //sf::RectangleShape bomb(sf::Vector2f(100.0f, 100.0f));
-    sf::Sprite bomb;
-    bomb.setScale(0.1,0.1);
-    bomb.setPosition(600.0f, 300.0f);
-
     //texture
     sf::Texture explosionTexture;
-    if(!explosionTexture.loadFromFile("./images/ExplosionAnimation.png")){
+    if(!explosionTexture.loadFromFile("./images/ExplosionAnimation2.png")){
         printf("Error load ball texture");
     }
-    
-    sf::Texture bombTexture;
-    if(!bombTexture.loadFromFile("./images/bombNoB.png")){
-        printf("Error load ball texture");
-    }
-    bomb.setTexture(explosionTexture);
 
-    //create the animation object
-    Animation animation(&explosionTexture, sf::Vector2u(4, 4), 0.1f);
+    //bomb
+    Bomb* bomb = new Bomb(&explosionTexture, sf::Vector2u(4,5), 0.3f, 250.0f, 600.0f);
+
+    //player
+    Player player(500.0f);
+
     //delta time 
     float deltaTime = 0.0f;
 
@@ -60,29 +47,13 @@ int main()
             }
         }
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))){
-            player.move(-15.0f, 0.0f);
-        }
-
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)|| (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))){
-            player.move(15.0f, 0.0f);
-        }
-
-        if(player.getGlobalBounds().intersects(bomb.getGlobalBounds()))
-        {
-            
-        }
-
-        //bomb movement, if bomb hits player explodes animation and game over
-        //bomb.move(0.0f, 2.0f);
-
-        animation.update(2, deltaTime);
-        bomb.setTextureRect(animation.uvRect);
+        player.update(deltaTime);
+        bomb->update(deltaTime, &player);
 
         window.clear(sf::Color::White);
-        window.draw(player);
         window.draw(ball);
-        window.draw(bomb);
+        bomb->draw(window);
+        player.draw(window);
         window.display();
     }
  

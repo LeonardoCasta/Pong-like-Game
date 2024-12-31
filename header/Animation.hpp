@@ -1,3 +1,6 @@
+#ifndef ANIMATION_H
+#define ANIMATION_H
+
 #include <SFML/Graphics.hpp>
 
 class Animation 
@@ -5,12 +8,12 @@ class Animation
     public:
         //functions
         Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
-        ~Animation();
-        void update(int row, float deltaTime);
+        void update(float deltaTime);
+        void Collision();
 
         //variables
         sf::IntRect uvRect;
-        int collision;
+        
 
     private:
         //variables
@@ -18,4 +21,7 @@ class Animation
         sf::Vector2u currentImage;
         float totalTime;
         float switchTime;
+        int state;
 };
+
+#endif

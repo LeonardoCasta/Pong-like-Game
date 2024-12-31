@@ -1,4 +1,5 @@
-#include "../header/Animation.h"
+#include "../header/Animation.hpp"
+#include "iostream"
 
 Animation::Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime)
 {
@@ -11,45 +12,51 @@ Animation::Animation(sf::Texture* texture, sf::Vector2u imageCount, float switch
     uvRect.width = texture->getSize().x / float(imageCount.x);
     uvRect.height = texture->getSize().y / float(imageCount.y);
 
-    collision = 1;
+    state = 0;
 }
 
-void Animation::update(int row, float deltaTime)
+void Animation::update(float deltaTime)
 {
-    //currentImage.y = row;
-
-    if (collision == 0)
-    {
-        
-    }
-    else if (collision == 1)
-    {
-        totalTime += deltaTime;
-
-        if (totalTime >= switchTime) 
-        {
-            totalTime -= switchTime;
-            currentImage.x++;
-            
-            if (currentImage.x >= imageCount.x)
+    
+    switch (state){
+        case 0: //not hit the player 
+            currentImage.x = 0;
+            currentImage.y = 4;
+            break;
+        case 1: //hit the player
+            totalTime += deltaTime;
+            if (totalTime >= switchTime) 
             {
-                currentImage.x = 0;
-                currentImage.y++;
-
-                if (currentImage.y >= imageCount.y)
+                totalTime -= switchTime;
+                currentImage.x++;
+                
+                if (currentImage.x >= imageCount.x)
                 {
-                    currentImage.y = 0;
+                    currentImage.x = 0;
+                    currentImage.y++;
+
+                    if (currentImage.y >= imageCount.y-1)
+                    {
+                        currentImage.x = 3;
+                        currentImage.y = 4;
+                        state++; //animation ended
+                    }
                 }
             }
-        }
+            break;
+        case 2: //end of animation
+            currentImage.x = 3;
+            currentImage.y = 4;
+            break;
     }
-        
 
     uvRect.left = currentImage.x * uvRect.width;
     uvRect.top = currentImage.y * uvRect.height;
 }
 
-Animation::~Animation()
+void Animation::Collision()
 {
-
+    state = 1;
+    currentImage.x = 0;
+    currentImage.y = 0;
 }
