@@ -1,5 +1,4 @@
-#include <Collider.hpp>
-
+#include <../header/Collider.hpp>
 
 Collider::Collider()
 {
@@ -41,4 +40,16 @@ bool Collider::circlesCollision(sf::CircleShape* first, sf::CircleShape* second)
     }
 
     return false;
+}
+
+void Collider::boxCollision(sf::CircleShape* circle, sf::RectangleShape* rectangle, float radius)
+{
+    float cx = circle->getPosition().x;      // circle position (set with mouse)
+    float cy = circle->getPosition().y;
+    float r = radius;                        // circle radius
+
+    float sx = 200;    // square position
+    float sy = 100;
+    float sw = 200;    // and dimensions
+    float sh = 200;
 }
