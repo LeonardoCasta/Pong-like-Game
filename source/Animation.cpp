@@ -5,7 +5,7 @@ Animation::Animation(sf::Texture* texture, sf::Vector2u imageCount, float switch
 {
     this->imageCount = imageCount;
     this->switchTime = switchTime;
-    totalTime = 0.0f;
+    this->totalTime = 0.0f;
     currentImage.x = 0;
     currentImage.y = 0;
 
@@ -17,17 +17,16 @@ Animation::Animation(sf::Texture* texture, sf::Vector2u imageCount, float switch
 
 void Animation::update(float deltaTime)
 {
-    
     switch (state){
         case 0: //not hit the player 
             currentImage.x = 0;
             currentImage.y = 4;
             break;
         case 1: //hit the player
-            totalTime += deltaTime;
-            if (totalTime >= switchTime) 
+            this->totalTime += deltaTime;
+            if (this->totalTime >= this->switchTime) 
             {
-                totalTime -= switchTime;
+                this->totalTime -= this->switchTime;
                 currentImage.x++;
                 
                 if (currentImage.x >= imageCount.x)
@@ -59,4 +58,11 @@ void Animation::Collision()
     state = 1;
     currentImage.x = 0;
     currentImage.y = 0;
+}
+
+void Animation::resetAnimation()
+{
+    state = 0;
+    currentImage.x = 0;
+    currentImage.y = 4;
 }

@@ -10,6 +10,7 @@ class Animation
         Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
         void update(float deltaTime);
         void Collision();
+        void resetAnimation();
 
         //variables
         sf::IntRect uvRect;

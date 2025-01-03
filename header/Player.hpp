@@ -11,10 +11,14 @@ class Player
     void draw(sf::RenderWindow &window);
     sf::FloatRect getBounds();
 
-private:
+    //variables
     sf::RectangleShape body;
+
+private:
     //Animation animation;
     float speed;
+    float width;
+    float height;
 };
 
 #endif 

@@ -4,26 +4,30 @@
 #include <SFML/Graphics.hpp>
 #include "../header/Animation.hpp"
 #include "../header/Player.hpp"
+#include <iostream>
+#include <random>
 
 class Bomb 
 {
 public:
     //methods
-    Bomb(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed, float x);
-    void update(float deltaTime, Player* player);
+    Bomb(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed);
+    void update(float deltaTime, Player* player, sf::RenderWindow& window);
     void draw(sf::RenderWindow &window);
     sf::FloatRect getBounds();
     void setCollision();
+    void createBomb();
 
     //variables
     int state = 0;
 
 private:
     //varibles
-    sf::Sprite body;
+    std::vector<sf::Sprite> bombs;
+    sf::Texture* texture;
     Animation animation;
     float speed;
-    float x;
+    float totalTime;
 };
 
 #endif

@@ -3,10 +3,12 @@
 Player::Player(/*sf::Texture* texture, sf::Vector2u imageCount, float switchTime,*/ float speed)/* : animation(texture, imageCount, switchTime)*/
 {
     this->speed = speed;
+    this->width = 100.0f;
+    this->height = 25.0f;
 
-    body.setSize(sf::Vector2f(100.0f, 25.0f));
-    body.setPosition(840.0f, 650.0f);
-    body.setFillColor(sf::Color::Blue);
+    body.setSize(sf::Vector2f(this->width, this->height));
+    body.setPosition(640.0f - this->width/2, 650.0f);
+    body.setFillColor(sf::Color::White);
 }
 
 void Player::update(float deltaTime)
@@ -35,3 +37,4 @@ sf::FloatRect Player::getBounds()
 {
     return body.getGlobalBounds();
 }
+
