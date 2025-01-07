@@ -11,19 +11,27 @@ Player::Player(/*sf::Texture* texture, sf::Vector2u imageCount, float switchTime
     body.setFillColor(sf::Color::White);
 }
 
-void Player::update(float deltaTime)
+void Player::update(float deltaTime, GameState &gameState)
 {
     sf::Vector2f movement(0.0f, 0.0f);
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)))
+    switch(gameState)
     {
-            movement.x -= speed * deltaTime;
-    }
+        case GAME:
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)))
+            {
+                    movement.x -= speed * deltaTime;
+            }
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)|| (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)))
-    {
-            movement.x += speed * deltaTime;
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)|| (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)))
+            {
+                    movement.x += speed * deltaTime;
+            }
+        case MAIN_MENU:
+        case GAME_OVER:
+            break;
     }
+    
 
     body.move(movement);
 }

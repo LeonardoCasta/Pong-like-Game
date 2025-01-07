@@ -66,3 +66,8 @@ void Animation::resetAnimation()
     currentImage.x = 0;
     currentImage.y = 4;
 }
+
+bool Animation::animationEnded()
+{
+    return state == 2;
+}

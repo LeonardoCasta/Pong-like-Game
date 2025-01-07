@@ -10,6 +10,8 @@ g++ -c ./source/Player.cpp -o player.o
 
 g++ -c ./source/Collider.cpp -o collider.o
 
-g++ main.o animation.o bomb.o player.o collider.o -o game -lsfml-graphics -lsfml-window -lsfml-system
+g++ -c ./source/Button.cpp -o button.o
+
+g++ main.o animation.o bomb.o player.o collider.o button.o -o game -lsfml-graphics -lsfml-window -lsfml-system
 
 #./sfml-app

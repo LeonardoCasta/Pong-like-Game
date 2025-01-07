@@ -10,7 +10,7 @@ Bomb::Bomb(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, floa
     createBomb();
 }
 
-void Bomb::update(float deltaTime, Player* player, sf::RenderWindow& window)
+void Bomb::update(float deltaTime, Player* player, sf::RenderWindow& window, GameState &gameState)
 {
     sf::Vector2f movement(0.0f, 0.0f);
 
@@ -31,6 +31,7 @@ void Bomb::update(float deltaTime, Player* player, sf::RenderWindow& window)
             //intersects with the player
             if (this->getBounds().intersects(player->getBounds()))
             {
+                gameState = GameState::GAME_OVER;
                 state = 2;
                 this->setCollision();
             }
@@ -47,11 +48,23 @@ void Bomb::update(float deltaTime, Player* player, sf::RenderWindow& window)
             bombs.front().setTextureRect(animation.uvRect);
             bombs.front().move(movement);
             this->draw(window);
+
+            if(animation.animationEnded()) //if animation ended delete the bomb and go to idle state
+            {
+                state = 990;
+                bombs.erase(bombs.begin());
+                animation.resetAnimation();
+            }
             break;
         case 3:
             bombs.erase(bombs.begin());
             animation.resetAnimation();
             state = 999;
+            break;
+        case 990:
+            if(gameState == GameState::GAME){
+                state = 0;
+            }
             break;
         case 999:
             this->totalTime += deltaTime;

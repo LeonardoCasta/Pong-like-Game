@@ -11,6 +11,7 @@ class Animation
         void update(float deltaTime);
         void Collision();
         void resetAnimation();
+        bool animationEnded();
 
         //variables
         sf::IntRect uvRect;
