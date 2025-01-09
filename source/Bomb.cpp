@@ -37,7 +37,7 @@ void Bomb::update(float deltaTime, Player* player, sf::RenderWindow& window, Gam
             }
 
             //out of field
-            if (this->bombs.front().getPosition().y > 900.0f)
+            if ((this->bombs.front().getPosition().y > 900.0f))
             {
                 state = 3;
             }

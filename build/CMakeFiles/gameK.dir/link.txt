@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/gameK.dir/link.d CMakeFiles/gameK.dir/source/Animation.cpp.o CMakeFiles/gameK.dir/source/Bomb.cpp.o CMakeFiles/gameK.dir/source/Button.cpp.o CMakeFiles/gameK.dir/source/Collider.cpp.o CMakeFiles/gameK.dir/source/Player.cpp.o CMakeFiles/gameK.dir/source/main.cpp.o -o /home/leo/CPP/gameK  -lsfml-graphics -lsfml-window -lsfml-system

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <utility> 
 #include <memory>
+#include <random>
 #include <SFML/Graphics.hpp>
 #include "../header/Bomb.hpp"
 #include "../header/Player.hpp"
@@ -12,8 +13,10 @@
 #define image "./images/galaxy.jpg"
 #define buttonImage "./images/button1.png"
 #define fontFile "./images/PublicPixel.ttf"
+#define playerImage "./images/ship_full.png"
 
 void ballUpdate(float deltaTime, sf::CircleShape* ball, sf::Vector2f* vel, Player* player, Collider* collider, GameState &gameState);
+void ResetPositions(sf::CircleShape* ball, sf::Vector2f* vel, Player* player);
 
 int main()
 {
@@ -58,10 +61,8 @@ int main()
     //ball
     sf::CircleShape ball(20.0f);
     ball.setOrigin(20.0f, 20.0f);
-    ball.setPosition(100.0f, 200.0f);
     ball.setFillColor(sf::Color::White);
-    sf::Vector2f vel= {300, 450};
-    ball.move(vel);
+    sf::Vector2f vel;
 
     //texture
     sf::Texture explosionTexture;
@@ -69,10 +70,14 @@ int main()
         printf("Error load explosionTexture texture");
     }
     //bomb
-    Bomb* bomb = new Bomb(&explosionTexture, sf::Vector2u(4,5), 0.1f, 250.0f);
+    std::unique_ptr<Bomb> bomb = std::make_unique<Bomb>(&explosionTexture, sf::Vector2u(4,5), 0.1f, 250.0f);
 
     //player
-    Player player(500.0f);
+    sf::Texture playerTexture;
+    if(!playerTexture.loadFromFile(playerImage)){
+        printf("Error load player texture");
+    }
+    Player player(&playerTexture, sf::Vector2u(3,1), 600.0f);
 
     //delta time 
     float deltaTime = 0.0f;
@@ -88,7 +93,7 @@ int main()
         {
             switch(event.type)
             {
-                case  sf::Event::Closed:
+                case sf::Event::Closed:
                     window.close();
                     break;
             }
@@ -97,6 +102,7 @@ int main()
         switch (gameState)
         {
             case MAIN_MENU:
+                ResetPositions(&ball, &vel, &player);
                 //update
                 button->update(window, gameState, GameState::GAME);
                 //draw
@@ -118,6 +124,7 @@ int main()
                 window.display();
                 break;
             case GAME_OVER:
+                ResetPositions(&ball, &vel, &player);
                 //update
                 buttonGameOver->update(window, gameState, GameState::GAME);
                 //draw
@@ -135,6 +142,20 @@ int main()
     return 0;
 }
 
+void ResetPositions(sf::CircleShape* ball, sf::Vector2f* vel, Player* player)
+{
+    std::random_device rd;  //seed generator
+    std::mt19937 gen(rd());  // Mersenne Twister engine seeded with rd()
+    std::uniform_int_distribution<> distr(500, 600); //define the range
+    int x = distr(gen); //define the rand number
+    int y = distr(gen); //define the rand number
+    vel->x = x;
+    vel->y = y;
+
+    player->setPosition();
+    ball->setPosition(640.0f, (player->body.getPosition().y) - 20);
+}
+
 void ballUpdate(float deltaTime, sf::CircleShape* ball, sf::Vector2f* vel, Player* player, Collider* collider, GameState &gameState)
 {
     vel->x = vel->x + (0 * deltaTime);
@@ -143,23 +164,24 @@ void ballUpdate(float deltaTime, sf::CircleShape* ball, sf::Vector2f* vel, Playe
     float posX = ball->getPosition().x + (vel->x * deltaTime);
     float posY = ball->getPosition().y + (vel->y * deltaTime);
 
-    if ((ball->getPosition().x - 20) <= 0 || (ball->getPosition().x + 20) >= 1280)
+    float radius = ball->getRadius();
+
+    if ((ball->getPosition().x - radius) <= 0 || (ball->getPosition().x + radius) >= 1280)
     {
         vel->x = -vel->x;
     }
 
-    if ((ball->getPosition().y - 20) <= 0 /*|| (ball->getPosition().y + 20) >= 720*/)
+    if ((ball->getPosition().y - 20) <= 0)
     {
         vel->y = -vel->y;
     }
 
-    if ((ball->getPosition().y + 20) >= 720)
+    if ((ball->getPosition().y) > (player->body.getPosition().y))
     {
-        ball->setPosition(100.0f, 200.0f);
         gameState = GameState::GAME_OVER;
     }
 
-    if(collider->boxCollision(ball, player, ball->getRadius()))
+    if(collider->boxCollision(ball, player, radius))
     {
         vel->y = -vel->y;
     }

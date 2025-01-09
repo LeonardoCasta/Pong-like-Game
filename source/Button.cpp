@@ -47,6 +47,10 @@ void Button::update(sf::RenderWindow& window, GameState &gameState, GameState ne
     mp.x = sf::Mouse::getPosition(window).x;
     mp.y = sf::Mouse::getPosition(window).y;
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)){
+            gameState = nextState;
+    }
+
     //mouse over control
     if (body.getGlobalBounds().contains(mp))
     {
