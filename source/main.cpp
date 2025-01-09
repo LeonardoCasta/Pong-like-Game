@@ -11,7 +11,7 @@
 #include "../header/GameState.hpp"
 
 #define image "./images/galaxy.jpg"
-#define buttonImage "./images/button1.png"
+#define buttonImage "./images/button.png"
 #define fontFile "./images/PublicPixel.ttf"
 #define playerImage "./images/ship_full.png"
 
