@@ -40,9 +40,13 @@ int main()
     }
     std::unique_ptr<Button> button = std::make_unique<Button>(ButtonTexture, font, "Play Game", 640.0f, 360.0f, 30.0f);
 
-    std::unique_ptr<Button> buttonGameOver = std::make_unique<Button>(ButtonTexture, font, "Play Again", 640.0f, 250.0f, 30.0f);
+    std::unique_ptr<Button> buttonGameOver = std::make_unique<Button>(ButtonTexture, font, "Play Again", 640.0f, 270.0f, 30.0f);
 
-    std::unique_ptr<Button> textGameOver = std::make_unique<Button>(font, "Game Over", 640.0f, 75.0f, 60.0f);
+    std::unique_ptr<Button> textGameOver = std::make_unique<Button>(font, "Game Over", 640.0f, 145.0f, 60.0f);
+
+    std::unique_ptr<Button> textPressEnter = std::make_unique<Button>(font, "Press Enter to play or click Play button", 640.0f, 45.0f, 20.0f);
+
+    std::unique_ptr<Button> textMove = std::make_unique<Button>(font, "Move with arrow keys or 'a' and 'd'", 640.0f, 75.0f, 20.0f);
 
     //background
     sf::Texture Background;
@@ -108,6 +112,8 @@ int main()
                 //draw
                 window.clear();
                 window.draw(background);
+                textPressEnter->draw(window);
+                textMove->draw(window);
                 button->draw(window);
                 window.display();
                 break;
@@ -132,6 +138,8 @@ int main()
                 window.draw(background);
                 player.draw(window);
                 bomb->update(deltaTime, &player, window, gameState);
+                textPressEnter->draw(window);
+                textMove->draw(window);
                 textGameOver->draw(window);
                 buttonGameOver->draw(window);
                 window.display();
